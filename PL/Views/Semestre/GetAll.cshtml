@@ -1,0 +1,67 @@
+﻿@model ML.Semestre
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <section>
+
+        <h1 class="text-center">Lista de Semestres</h1>
+        <p>
+            En este modulo puedes visualizar a los semestres existentes,<br />
+            agregar, modificar y eliminar un alumno
+        </p>
+    </section>
+    <section>
+
+        <div style="float:right;">
+            <div class="row">
+                @Html.ActionLink("Agregar", "Form", "Semestre", htmlAttributes: new { @class = "btn btn-success bi bi-person-plus-fill" })
+            </div>
+        </div>
+    </section>
+    <hr />
+    <section>
+        @if (Model.Semestres == null)
+        {
+            <div class="row">
+                <div class="alert alert-danger" role="alert">
+                    @ViewBag.Message
+                </div>
+            </div>
+        }
+        else
+        {
+
+
+            <table class="table table-dark table-hover table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <td class="text-center" style=" font-weight:bold;">Editar</td>
+                        <td class="visually-hidden">IdSemestre</td>
+                        <td class="text-center" style="font-weight:bold;">Nombre</td>
+                        <td class="text-center" style=" font-weight:bold;">Eliminar</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (ML.Semestre semestre in Model.Semestres)
+                    {
+                        <tr>
+                            <td class="text-center"><a class="btn btn-warning bi bi-pencil-square" href="@Url.Action("Form", "Semestre", new { IdSemestre = semestre.IdSemestre })"></a></td>
+                            <td class="visually-hidden">@semestre.IdSemestre</td>
+                            <td>@semestre.Nombre </td>             
+                            <td class="text-center"><a class="btn btn-danger bi bi-trash" href="@Url.Action("Delete", "Semestre", new { IdSemestre = semestre.IdSemestre})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        }
+
+
+
+    </section>
+</div>

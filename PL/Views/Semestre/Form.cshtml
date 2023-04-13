@@ -1,0 +1,49 @@
+﻿@model ML.Semestre
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Alumno</h2>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("Form", "Semestre", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.IdSemestre, new { @class = "visually-hidden" })
+
+                    @Html.TextBoxFor(model => model.IdSemestre, new { @class = "visually-hidden form-control" })
+                    @Html.ValidationMessageFor(model => model.IdSemestre)
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Nombre)
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-plus fa-fade" style="color:greenyellow"></i></span>
+                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @onkeypress="SoloLetras(event, 'lblNombre', 'txtNombre')" })
+                        @Html.ValidationMessageFor(model => model.Nombre)
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <input type="submit" value="Guardar" class="btn btn-success" />
+                    @Html.ActionLink("Regresar", "GetAll", "Alumno", htmlAttributes: new { @class = "btn btn-danger" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+       
