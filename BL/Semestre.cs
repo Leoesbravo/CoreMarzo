@@ -22,6 +22,9 @@ namespace BL
                         semestre.IdSemestre = row.IdSemestre;
                         semestre.Nombre = row.Nombre;
 
+                        semestre.Alumno = new ML.Alumno();
+                        semestre.Alumno.Nombre = row.NombreAlumno;
+
                         result.Objects.Add(semestre);
 
                     }
