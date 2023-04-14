@@ -1,0 +1,220 @@
+﻿@model ML.Alumno
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Formulario de Alumno</h2>
+
+
+<div class="container-fluid">
+
+
+
+    @using (Html.BeginForm("Form", "Alumno", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <div class="row">
+            <div class="col">
+                @Html.LabelFor(model => model.IdAlumno, new { @class = "visually-hidden" })
+
+                @Html.TextBoxFor(model => model.IdAlumno, new { @class = "visually-hidden form-control" })
+
+                @Html.ValidationMessageFor(model => model.IdAlumno)
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Nombre)
+
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @placeholder = "Ejemplo: Leonardo" })
+
+                @Html.ValidationMessageFor(model => model.Nombre)
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.ApellidoPaterno)
+
+                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @id = "txtNombre" })
+
+                @Html.ValidationMessageFor(model => model.ApellidoPaterno)
+            </div>
+
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.ApellidoMaterno)
+
+                @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control", @id = "txtNombre" })
+
+                @Html.ValidationMessageFor(model => model.ApellidoMaterno)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+
+                @Html.LabelFor(model => model.FechaNacimiento)
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-circle-user fa-beat" style="color: #54A3B1"></i></span>
+                    @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control", @id = "txtFechaNacimiento", @placeholder = "DD-MM-YYYY" })
+
+                    @Html.ValidationMessageFor(model => model.FechaNacimiento)
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col">
+                @Html.LabelFor(model => model.Semestre)
+
+                @Html.DropDownListFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Nombre"), "Selecciona una opción", new { @class = "form-control", @id = "ddlSemestre" })
+
+                @Html.ValidationMessageFor(model => model.Semestre.IdSemestre)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Imagen)
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-plus"></i></span>
+                    <input id="inpImagen" type='file' class="form-control" name="inpImagen" onchange="validateFile(this), visualizarImagen(this);  " />
+                </div>
+                @if (Model.Imagen == null)
+                {
+                    <img id="Img" src="/NewFolder/icon-256x256.png" style="width:250px ; height:250px" />
+                }
+                else
+                {
+                    <img id="Img" src="data:image/*;base64,@Model.Imagen" style="width:250px ; height:250px" />
+                }
+            </div>
+            </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2>Datos del horario</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Horario.Grupo.Plantel)
+
+                @Html.DropDownListFor(model => model.Horario.Grupo.Plantel.IdPlantel, new SelectList(Model.Horario.Grupo.Plantel.Planteles, "IdPlantel", "Nombre"), "Selecciona una opción", new { @class = "form-control", @id = "ddlPlantel" })
+
+                @Html.ValidationMessageFor(model => model.Horario.Grupo.Plantel.IdPlantel)
+            </div>
+
+
+            @if (Model.Horario.Grupo.Grupos == null)
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Horario.Grupo)
+
+                    @Html.DropDownListFor(model => model.Horario.Grupo.IdGrupo, new SelectList(string.Empty, "Value", "Text"), "Selecciona una opción", new { @class = "form-control", @id = "ddlGrupo" })
+                </div>
+            }
+            else
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Horario.Grupo)
+
+                    @Html.DropDownListFor(model => model.Horario.Grupo.IdGrupo, new SelectList(Model.Horario.Grupo.Grupos, "IdGrupo", "Nombre"), "Selecciona una opción", new { @class = "form-control", @id = "ddlGrupo" })
+                </div>
+            }
+            <div class="col-md-3">
+
+                @Html.LabelFor(model => model.Horario.Turno)
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-circle-user fa-beat" style="color: #54A3B1"></i></span>
+                    @Html.TextBoxFor(model => model.Horario.Turno, new { @class = "form-control", @id = "txtFechaNacimiento", @placeholder = "Matutino/Vespertino" })
+
+                    @Html.ValidationMessageFor(model => model.Horario.Turno)
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col">
+                <input type="submit" value="Guardar" class="btn btn-success" />
+                @Html.ActionLink("Regresar", "GetAll", "Alumno", htmlAttributes: new { @class = "btn btn-danger" })
+            </div>
+
+        </div>
+
+    }
+
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script type="text/javascript">
+
+     $(document).ready(function () {
+        $("#ddlPlantel").change(function () {
+            $("#ddlGrupo").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetGrupo")',
+                dataType: 'json',
+                data: { idPlantel: $("#ddlPlantel").val() },
+                success: function (grupos) {
+                    $("#ddlGrupo").append('<option value="0">' + 'Seleccione una opción' + '</option>');
+                    $.each(grupos, function (i, grupos) {
+                        $("#ddlGrupo").append('<option value="' + grupos.idGrupo + '">'+ grupos.nombre + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    $("#ddlGrupo").empty();
+                    $("#ddlGrupo").append('<option value="0">' + 'Seleccione una opción' + '</option>');
+                }
+            });
+        });
+     });
+
+
+    function validateFile() {
+        var allowedExtension = ['jpeg', 'jpg', 'png'];
+        var fileExtension = document.getElementById('inpImagen').value.split('.').pop().toLowerCase();
+        var isValidFile = false;
+        for (var index in allowedExtension) {
+            if (fileExtension === allowedExtension[index]) {
+                isValidFile = true;
+                break;
+            }
+        }
+        if (!isValidFile) {
+            alert('Las extensiones permitidas son : *.' + allowedExtension.join(', *.'));
+            document.getElementById('inpImagen').value = ""
+        }
+        return isValidFile;
+    }
+
+    function visualizarImagen(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#Img').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+
+
+            $(function () {
+                $("#txtFechaNacimiento").datepicker({
+                    dateFormat: 'dd-mm-yy',
+                    changeMonth: true,
+                    changeYear: true
+                });
+            });
+</script>

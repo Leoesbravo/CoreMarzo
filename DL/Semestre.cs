@@ -12,7 +12,4 @@ public partial class Semestre
     public virtual ICollection<Alumno> Alumnos { get; set; } = new List<Alumno>();
 
 
-
-
-    public string NombreAlumno { get; set; }
 }

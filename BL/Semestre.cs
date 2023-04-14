@@ -22,9 +22,6 @@ namespace BL
                         semestre.IdSemestre = row.IdSemestre;
                         semestre.Nombre = row.Nombre;
 
-                        semestre.Alumno = new ML.Alumno();
-                        semestre.Alumno.Nombre = row.NombreAlumno;
-
                         result.Objects.Add(semestre);
 
                     }
@@ -51,7 +48,7 @@ namespace BL
                 using (DL.IespinozaProgramacionNcapasGm2023Context context = new DL.IespinozaProgramacionNcapasGm2023Context())
                 {
                     int queryEF = context.Database.ExecuteSqlRaw($"SemestreAdd '{semestre.Nombre}'");
-                    //int queryEF = context.Database.ExecuteSqlRaw($"SemestreAdd '{semestre.Nombre}', {semestre.IdSemestre} ");
+                    //int queryEF = context.Database.ExecuteSqlRaw($"SemestreAdd '{semestre.Nombre}'");
                     
 
                     if (queryEF > 0)

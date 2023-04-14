@@ -9,7 +9,7 @@
         public string FechaNacimiento { get; set; }
         public string NombreCompleto { get; set; }
         public string Imagen { get; set; }
-        //public ML.Horario Horario { get; set; }
+        public ML.Horario Horario { get; set; }
 
         //public byte IdSemestre { get; set; } //FK
 

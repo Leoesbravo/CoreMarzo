@@ -1,0 +1,97 @@
+﻿@model ML.Alumno
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <section>
+        <h2>Módulo de alumno</h2>
+        <p>
+            En este modulo puedes visualizar a los alumnos existentes,<br />
+            agregar, modificar y eliminar un alumno
+        </p>
+    </section>
+    <section>
+
+        <div style="float:right;">
+            <div class="row">
+                @Html.ActionLink("Agregar", "Form", "Alumno", htmlAttributes: new { @class = "btn btn-success bi bi-person-plus-fill" })
+                @*localhost/Alumno/Form      *@
+
+
+            </div>
+        </div>
+    </section>
+    <hr />
+    <section>
+        @if (Model.Alumnos == null)
+        {
+            <div class="row">
+                <div class="alert alert-danger" role="alert">
+                    @ViewBag.Message
+                </div>
+            </div>
+        }
+        else
+        {
+
+
+            <table class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <td class="text-center" style=" font-weight:bold;">Editar</td>
+
+                        <td class="visually-hidden">IdAlumno</td>
+                        <td class="text-center" style="font-weight:bold;">Nombre</td>
+                        <td class="text-center" style=" font-weight:bold;">Fecha de Nacimiento</td>
+                        <td class="visually-hidden">IdSemestre</td>
+                        <td class="text-center" style=" font-weight:bold;">Semestre</td>
+                        <td class="text-center" style=" font-weight:bold;">Imagen</td>
+                        <td class="text-center" style=" font-weight:bold;">Horario</td>
+
+                        <td class="text-center" style=" font-weight:bold;">Eliminar</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (ML.Alumno alumno in Model.Alumnos)
+                    {
+                    <tr>
+                        <td class="text-center"><a class="btn btn-warning bi bi-pencil-square" href="@Url.Action("Form", "Alumno", new { IdAlumno = alumno.IdAlumno })"></a></td>
+                        <td class="visually-hidden">@alumno.IdAlumno</td>
+                        <td>@alumno.Nombre @alumno.ApellidoPaterno @alumno.ApellidoMaterno</td>
+                        @*<td>@alumno.ApellidoPaterno</td>
+        <td>@alumno.ApellidoMaterno</td>*@
+                        <td>@alumno.FechaNacimiento</td>
+                        <td class="visually-hidden">@alumno.Semestre.IdSemestre</td>
+                        <td class="text-center">@alumno.Semestre.Nombre</td>
+
+
+                        @if (alumno.Imagen == null || alumno.Imagen == "")
+                        {
+                            <td class="text-center"><img src="/NewFolder/icon-256x256.png" width="50px" height="50px" /></td>
+                        }
+                        else
+                        {
+                            <td> <img id="Img" src="data:image/*;base64,@alumno.Imagen" style="width:50px ; height:50px" /></td>
+
+                        }
+                        <td class="text-center">@alumno.Horario.Turno @alumno.Horario.Grupo.Nombre @alumno.Horario.Grupo.Plantel.Nombre</td>
+                        <td class="text-center"><a class="btn btn-danger bi bi-trash" href="@Url.Action("Delete", "Alumno", new { idAlumno = alumno.IdAlumno})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+        }
+
+
+
+    </section>
+</div>
+
+
+
+
+
