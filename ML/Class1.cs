@@ -1,9 +1,16 @@
-﻿namespace ML
+﻿
+using System.ComponentModel.DataAnnotations;
+
+namespace ML
 {
     public class Alumno
     {
+        
         public int IdAlumno { get; set; }
+        [Required]
+        //[RegularExpression(@"[a-zA-Z]")]
         public string Nombre { get; set; }
+        [Required]
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
         public string FechaNacimiento { get; set; }

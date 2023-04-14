@@ -84,46 +84,64 @@ namespace PL.Controllers
         [HttpPost] //va a recibir la informacion que venga desde la vista  
         public ActionResult Form(ML.Alumno alumno)
         {
-            IFormFile file = Request.Form.Files["inpImagen"];
-
-            if (file != null)
+            if (ModelState.IsValid)//validar si se cumplieron todas las data annotations
             {
-                alumno.Imagen = Convert.ToBase64String(ConvertToBytes(file));
+                IFormFile file = Request.Form.Files["inpImagen"];
 
-            }
-
-            ML.Result result = new ML.Result();
-            //add o update
-            if (alumno.IdAlumno == 0)
-            {
-                //add
-                result = BL.Alumno.Add(alumno);
-                if (result.Correct)
+                if (file != null)
                 {
-                    ViewBag.Message = "Se inserto correctamente el alumno";
+                    alumno.Imagen = Convert.ToBase64String(ConvertToBytes(file));
+
+                }
+
+                ML.Result result = new ML.Result();
+                //add o update
+                if (alumno.IdAlumno == 0)
+                {
+                    //add
+                    result = BL.Alumno.Add(alumno);
+                    if (result.Correct)
+                    {
+                        ViewBag.Message = "Se inserto correctamente el alumno";
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Ocurrio un error al insertar el alumno" + result.ErrorMessage;
+                    }
+
                 }
                 else
                 {
-                    ViewBag.Message = "Ocurrio un error al insertar el alumno" + result.ErrorMessage;
+
+                    //update
+                    //result = BL.Alumno.UpdateEF(alumno);
+                    //if (result.Correct)
+                    //{
+                    //    ViewBag.Message = "Se actualizo correctamente el registro del alumno";
+                    //}
+                    //else
+                    //{
+                    //    ViewBag.Message = "Ocurrio un error al actualizar el registro del alumno" + result.ErrorMessage;
+                    //}
                 }
 
+                return View("Modal");
             }
             else
             {
+                ML.Result resultSemestres = BL.Semestre.GetAll();
+                ML.Result resultPlanteles = BL.Plantel.GetAll();
 
-                //update
-                //result = BL.Alumno.UpdateEF(alumno);
-                //if (result.Correct)
-                //{
-                //    ViewBag.Message = "Se actualizo correctamente el registro del alumno";
-                //}
-                //else
-                //{
-                //    ViewBag.Message = "Ocurrio un error al actualizar el registro del alumno" + result.ErrorMessage;
-                //}
+                alumno.Semestre = new ML.Semestre();
+
+                alumno.Horario = new ML.Horario();
+                alumno.Horario.Grupo = new ML.Grupo();
+                alumno.Horario.Grupo.Plantel = new ML.Plantel();
+                alumno.Semestre.Semestres = resultSemestres.Objects;
+                alumno.Horario.Grupo.Plantel.Planteles = resultPlanteles.Objects;
+                return View(alumno);
             }
-
-            return View("Modal");
+          
         }
 
         public static byte[] ConvertToBytes(IFormFile imagen)
