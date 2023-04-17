@@ -5,12 +5,11 @@ namespace ML
 {
     public class Alumno
     {
-        
+
         public int IdAlumno { get; set; }
-        [Required]
-        //[RegularExpression(@"[a-zA-Z]")]
+        [RegularExpression("^[A-Za-z ]+$", ErrorMessage = "Solo se permite ingresar letras.")]
         public string Nombre { get; set; }
-        [Required]
+        [Required(ErrorMessage = "campo obligatorio")]
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
         public string FechaNacimiento { get; set; }

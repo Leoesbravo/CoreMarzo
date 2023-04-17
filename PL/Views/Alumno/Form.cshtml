@@ -29,17 +29,19 @@
             <div class="col-md-4">
                 @Html.LabelFor(model => model.Nombre)
 
-                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @placeholder = "Ejemplo: Leonardo" })
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @placeholder = "Ejemplo: Leonardo", @onkeypress="SoloLetras(event, 'txtNombre', 'lblNombre')" })
 
-                @Html.ValidationMessageFor(model => model.Nombre)
+                @Html.ValidationMessageFor(model => model.Nombre, null, new {@class="text-danger"})
+                @Html.Label(null, "", new{@id="lblNombre"})
             </div>
 
             <div class="col-md-4">
                 @Html.LabelFor(model => model.ApellidoPaterno)
 
-                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @id = "txtNombre" })
+                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @id = "txtApellidoPaterno", @onkeypress="SoloLetras(event,'txtApellidoPaterno', 'lblApellidoPaterno')" })
 
-                @Html.ValidationMessageFor(model => model.ApellidoPaterno)
+                @Html.ValidationMessageFor(model => model.ApellidoPaterno,null, new {@class ="text-danger"})
+                @Html.Label(null, "", new{@id="lblApellidoPaterno"})
             </div>
 
 
@@ -92,7 +94,7 @@
                     <img id="Img" src="data:image/*;base64,@Model.Imagen" style="width:250px ; height:250px" />
                 }
             </div>
-            </div>
+        </div>
         <hr />
         <div class="row">
             <div class="col-md-12 text-center">
@@ -217,4 +219,20 @@
                     changeYear: true
                 });
             });
+
+                function SoloLetras(e, idTextBox, idLabel) {
+           var caracter = e.key;
+           if (!/^[a-zA-Z]/g.test(caracter)) {
+               $('#' + idLabel  ).text("Solo se aceptan letras");
+               $('#' + idLabel ).css({ "color": "red" });
+               $('#' + idTextBox).css({ "border-color": "red", "background-color": "#f8d7da" });
+               return false;
+           }
+           else {
+               $('#' + idLabel).text("");
+               $('#' + idTextBox).css({ "border-color": "green", "background-color": "#D3F9C8"});
+               return true;
+           }
+            }
+
 </script>
