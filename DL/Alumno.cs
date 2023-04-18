@@ -19,11 +19,13 @@ public partial class Alumno
 
     public string? Imagen { get; set; }
 
+    public bool? Estatus { get; set; }
+
     public virtual ICollection<Horario> Horarios { get; set; } = new List<Horario>();
 
     public virtual Semestre? IdSemestreNavigation { get; set; }
 
-
+    //Propiedades creaadas 
 
     public string SemestreNombre { get; set; }
     public string Turno { get; set; }

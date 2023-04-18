@@ -4,10 +4,11 @@ namespace PL.Controllers
 {
     public class AlumnoController : Controller
     {
+        [HttpGet]
         public ActionResult GetAll()
         {
-            ML.Result result = BL.Alumno.GetAll();
             ML.Alumno alumno = new ML.Alumno();
+            ML.Result result = BL.Alumno.GetAll(alumno);
 
 
             if (result.Correct)
@@ -21,6 +22,27 @@ namespace PL.Controllers
 
             return View(alumno);
         }
+
+        [HttpPost]
+        public ActionResult GetAll(ML.Alumno alumno)
+        {
+           
+            ML.Result result = BL.Alumno.GetAll(alumno);
+
+
+
+            if (result.Correct)
+            {
+                alumno.Alumnos = result.Objects;
+            }
+            else
+            {
+                ViewBag.Message = "Ocurrio un error al hacer la consulta de alumnos" + result.ErrorMessage;
+            }
+
+            return View(alumno);
+        }
+
         [HttpGet]
         public ActionResult Form(int? idAlumno)
         {
@@ -81,6 +103,7 @@ namespace PL.Controllers
 
             }
         }
+
         [HttpPost] //va a recibir la informacion que venga desde la vista  
         public ActionResult Form(ML.Alumno alumno)
         {
@@ -154,11 +177,21 @@ namespace PL.Controllers
 
             return bytes;
         }
+
         public JsonResult GetGrupo(int idPlantel)
         {
             var result = BL.Grupo.GetByIdPlantel(idPlantel);
 
             return Json(result.Objects);
+        }
+
+        [HttpPost]
+        public JsonResult CambiarStatus(int idAlumno, bool status)
+        {
+            
+            ML.Result result = BL.Alumno.CambiarEstatus(idAlumno,status);
+
+            return Json(result);
         }
 
     }

@@ -9,7 +9,7 @@ namespace BL
 {
     public class Alumno
     {
-        public static ML.Result GetAll()
+        public static ML.Result GetAll(ML.Alumno alumno)
         {
             ML.Result result = new ML.Result();
 
@@ -17,18 +17,22 @@ namespace BL
             {
                 using (DL.IespinozaProgramacionNcapasGm2023Context context = new DL.IespinozaProgramacionNcapasGm2023Context())
                 {
-                    var semestreList = context.Alumnos.FromSqlRaw("AlumnoGetAll").ToList();
+                    var semestreList = context.Alumnos.FromSqlRaw($"AlumnoGetAll '{alumno.Nombre}','{alumno.ApellidoPaterno}','{alumno.ApellidoMaterno}'").ToList();
 
                     result.Objects = new List<object>();
 
                     foreach (var row in semestreList)
                     {
-                        ML.Alumno alumno = new ML.Alumno();
+                        alumno = new ML.Alumno();
 
                         alumno.IdAlumno = row.IdAlumno;
                         alumno.Nombre = row.Nombre;
+                        alumno.ApellidoPaterno = row.ApellidoPaterno;
+                        alumno.ApellidoMaterno = row.ApellidoMaterno;
+
                         alumno.Imagen = row.Imagen;
-                        alumno.FechaNacimiento = row.FechaNacimiento.Value.ToString("dd-mm-yyyy");
+                        alumno.FechaNacimiento = row.FechaNacimiento.Value.ToString("dd-MM-yyyy");
+                        alumno.Estatus = row.Estatus.Value;
 
                         alumno.Semestre = new ML.Semestre();
                         alumno.Semestre.IdSemestre = row.IdSemestre.Value;
@@ -140,6 +144,56 @@ namespace BL
                 result.Ex = ex;
             }
 
+            return result;
+        }
+
+        public static ML.Result Update(ML.Alumno alumno)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL.IespinozaProgramacionNcapasGm2023Context context = new DL.IespinozaProgramacionNcapasGm2023Context())
+                {
+                    int queryEF = context.Database.ExecuteSqlRaw($"AlumnoUpdate {alumno.IdAlumno},'{alumno.Nombre}','{alumno.ApellidoPaterno}','{alumno.ApellidoMaterno}', '{alumno.FechaNacimiento}', {alumno.Semestre.IdSemestre} ,'{alumno.Imagen}',{alumno.Estatus}");
+
+                    if (queryEF > 0)
+                    {
+                        result.Correct = true;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = "Ocurrio un error al insertar el alumno" + ex;
+            }
+            return result;
+        }
+
+        public static ML.Result CambiarEstatus(int idAlumno, bool estatus)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL.IespinozaProgramacionNcapasGm2023Context context = new DL.IespinozaProgramacionNcapasGm2023Context())
+                {
+                    int queryEF = context.Database.ExecuteSqlRaw($"AlumnoEstatus {idAlumno},{estatus}");
+
+                    if (queryEF > 0)
+                    {
+                        result.Correct = true;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = "Ocurrio un error al insertar el alumno" + ex;
+            }
             return result;
         }
     }

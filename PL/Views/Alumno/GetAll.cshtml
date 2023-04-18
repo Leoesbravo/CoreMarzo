@@ -17,13 +17,58 @@
         <div style="float:right;">
             <div class="row">
                 @Html.ActionLink("Agregar", "Form", "Alumno", htmlAttributes: new { @class = "btn btn-success bi bi-person-plus-fill" })
-                @*localhost/Alumno/Form      *@
-
-
             </div>
         </div>
     </section>
     <hr />
+    <div class="container-fluid">
+
+
+
+        @using (Html.BeginForm("GetAll", "Alumno", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+
+
+            <div class="row">
+                <div class="col-md-4">
+
+
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @placeholder = "Ejemplo: Nombre", @onkeypress="SoloLetras(event, 'txtNombre', 'lblNombre')" })
+
+                    @Html.ValidationMessageFor(model => model.Nombre, null, new {@class="text-danger"})
+                    @Html.Label(null, "", new{@id="lblNombre"})
+                </div>
+
+                <div class="col-md-4">
+
+
+                    @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @id = "txtApellidoPaterno", @onkeypress="SoloLetras(event,'txtApellidoPaterno', 'lblApellidoPaterno')" })
+
+                    @Html.ValidationMessageFor(model => model.ApellidoPaterno,null, new {@class ="text-danger"})
+                    @Html.Label(null, "", new{@id="lblApellidoPaterno"})
+                </div>
+
+
+                <div class="col-md-4">
+
+
+                    @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control", @id = "txtNombre" ,@placeholder = "Ejemplo: Nombre"})
+
+                    @Html.ValidationMessageFor(model => model.ApellidoMaterno)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <input type="submit" value="Buscar" class="btn btn-info" />
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
     <section>
         @if (Model.Alumnos == null)
         {
@@ -49,6 +94,7 @@
                         <td class="text-center" style=" font-weight:bold;">Semestre</td>
                         <td class="text-center" style=" font-weight:bold;">Imagen</td>
                         <td class="text-center" style=" font-weight:bold;">Horario</td>
+                        <td class="text-center" style=" font-weight:bold;">Estatus</td>
 
                         <td class="text-center" style=" font-weight:bold;">Eliminar</td>
                     </tr>
@@ -57,29 +103,47 @@
 
                     @foreach (ML.Alumno alumno in Model.Alumnos)
                     {
-                    <tr>
-                        <td class="text-center"><a class="btn btn-warning bi bi-pencil-square" href="@Url.Action("Form", "Alumno", new { IdAlumno = alumno.IdAlumno })"></a></td>
-                        <td class="visually-hidden">@alumno.IdAlumno</td>
-                        <td>@alumno.Nombre @alumno.ApellidoPaterno @alumno.ApellidoMaterno</td>
-                        @*<td>@alumno.ApellidoPaterno</td>
-        <td>@alumno.ApellidoMaterno</td>*@
-                        <td>@alumno.FechaNacimiento</td>
-                        <td class="visually-hidden">@alumno.Semestre.IdSemestre</td>
-                        <td class="text-center">@alumno.Semestre.Nombre</td>
+                        <tr>
+                            <td class="text-center"><a class="btn btn-warning bi bi-pencil-square" href="@Url.Action("Form", "Alumno", new { IdAlumno = alumno.IdAlumno })"></a></td>
+                            <td class="visually-hidden">@alumno.IdAlumno</td>
+                            <td>@alumno.Nombre @alumno.ApellidoPaterno @alumno.ApellidoMaterno</td>
+                            @*<td>@alumno.ApellidoPaterno</td>
+                    <td>@alumno.ApellidoMaterno</td>*@
+                            <td>@alumno.FechaNacimiento</td>
+                            <td class="visually-hidden">@alumno.Semestre.IdSemestre</td>
+                            <td class="text-center">@alumno.Semestre.Nombre</td>
 
 
-                        @if (alumno.Imagen == null || alumno.Imagen == "")
-                        {
-                            <td class="text-center"><img src="/NewFolder/icon-256x256.png" width="50px" height="50px" /></td>
-                        }
-                        else
-                        {
-                            <td> <img id="Img" src="data:image/*;base64,@alumno.Imagen" style="width:50px ; height:50px" /></td>
+                            @if (alumno.Imagen == null || alumno.Imagen == "")
+                            {
+                                <td class="text-center"><img src="/NewFolder/icon-256x256.png" width="50px" height="50px" /></td>
+                            }
+                            else
+                            {
+                                <td> <img id="Img" src="data:image/*;base64,@alumno.Imagen" style="width:50px ; height:50px" /></td>
 
-                        }
-                        <td class="text-center">@alumno.Horario.Turno @alumno.Horario.Grupo.Nombre @alumno.Horario.Grupo.Plantel.Nombre</td>
-                        <td class="text-center"><a class="btn btn-danger bi bi-trash" href="@Url.Action("Delete", "Alumno", new { idAlumno = alumno.IdAlumno})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>
-                    </tr>
+                            }
+                            <td class="text-center">@alumno.Horario.Turno @alumno.Horario.Grupo.Nombre @alumno.Horario.Grupo.Plantel.Nombre</td>
+
+                            @if (alumno.Estatus)
+                            {
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked onchange="ChangeStatus(@alumno.IdAlumno, this)">
+                                    </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" onchange="ChangeStatus(@alumno.IdAlumno, this);">
+                                    </div>
+                                </td>
+                            }
+
+                            <td class="text-center"><a class="btn btn-danger bi bi-trash" href="@Url.Action("Delete", "Alumno", new { idAlumno = alumno.IdAlumno})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -93,5 +157,28 @@
 
 
 
+@section Scripts {
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.material.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+    <script type="text/javascript">
+
+        function ChangeStatus(idAlumno, e) {
+            var status = e.checked
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CambiarStatus")',
+                dataType: 'json',
+                data: { idAlumno, status },
+                success: {},
+                error: function (ex) {
+                    alert('Failed.' + ex);
+                }
+            });
+        }
+    </script>
+}
 
 

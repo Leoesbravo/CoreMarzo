@@ -10,6 +10,4 @@ public partial class Semestre
     public string Nombre { get; set; } = null!;
 
     public virtual ICollection<Alumno> Alumnos { get; set; } = new List<Alumno>();
-
-
 }
