@@ -17,7 +17,7 @@ namespace BL
             {
                 using (DL.IespinozaProgramacionNcapasGm2023Context context = new DL.IespinozaProgramacionNcapasGm2023Context())
                 {
-                    var semestreList = context.Alumnos.FromSqlRaw($"AlumnoGetAll '{alumno.Nombre}','{alumno.ApellidoPaterno}','{alumno.ApellidoMaterno}'").ToList();
+                    var semestreList = context.Alumnos.FromSqlRaw($"AlumnoGetAll").ToList();
 
                     result.Objects = new List<object>();
 

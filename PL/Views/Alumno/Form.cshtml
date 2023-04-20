@@ -1,6 +1,5 @@
 ﻿@model ML.Alumno
 @{
-    ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,6 +22,7 @@
                 @Html.ValidationMessageFor(model => model.IdAlumno)
 
             </div>
+
         </div>
 
         <div class="row">
@@ -60,11 +60,15 @@
                 @Html.LabelFor(model => model.FechaNacimiento)
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-circle-user fa-beat" style="color: #54A3B1"></i></span>
-                    @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control", @id = "txtFechaNacimiento", @placeholder = "DD-MM-YYYY" })
+                    @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control", @id = "txtFechaNacimiento", @placeholder = "DD-MM-YYYY", @autocomplete = "off" })
 
                     @Html.ValidationMessageFor(model => model.FechaNacimiento)
                 </div>
-
+@*                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Genero)
+                    @Html.RadioButtonFor(m => m.Genero,"M")M
+                    @Html.RadioButtonFor(m => m.Genero,"F")F
+                </div>*@
             </div>
 
         </div>
@@ -152,6 +156,8 @@
 
 </div>
 
+@section Scripts
+{
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -236,3 +242,4 @@
             }
 
 </script>
+}
