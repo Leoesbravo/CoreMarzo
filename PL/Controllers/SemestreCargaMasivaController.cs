@@ -33,7 +33,15 @@ namespace PL.Controllers
 
                 string folderPath = configuration["PathFolder"];
                 string extensionArchivo = Path.GetExtension(file.FileName).ToLower();
-                string extensionModulo = configuration["TipoExcel"];
+                string extensionAppsettings = configuration["TipoExcel"];
+                if (extensionArchivo == extensionAppsettings)
+                {
+                    //crear una copia del archivo cargado
+                }
+                else
+                {
+                    ViewBag.Message = "El archivo que se intenta procesar no es un excel";
+                }
 
             }
             return View();
