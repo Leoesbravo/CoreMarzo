@@ -1,0 +1,30 @@
+﻿@model ML.Semestre
+@{
+    ViewData["Title"] = "CargaMasiva";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>CargaMasiva</h1>
+
+@using (Html.BeginForm("CargaMasiva", "SemestreCargaMasiva", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user-plus"></i></span>
+                <input id="fileExcel" type='file' class="form-control" name="fileExcel" />
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="submit" value="Procesar" class="btn btn-success" />
+           
+        </div>
+
+    </div>
+
+}
+

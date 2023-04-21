@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="SemestreCargaMasiva\" />
     <Folder Include="wwwroot\NewFolder\" />
   </ItemGroup>
 
