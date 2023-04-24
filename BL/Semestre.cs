@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Data.OleDb;
+
 namespace BL
 {
     public class Semestre
@@ -67,6 +70,106 @@ namespace BL
                 result.Correct = false;
                 result.ErrorMessage = "Ocurrio un error al insertar el alumno" + ex;
             }
+            return result;
+        }
+
+        public static ML.Result ConvertExcelToDataTable(string connString)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (OleDbConnection context = new OleDbConnection(connString))
+                {
+                    //string query = "SELECT * FROM [Hoja1$]";
+                    string query = "SELECT * FROM [Sheet1$]";
+                    using (OleDbCommand cmd = new OleDbCommand())
+                    {
+                        cmd.CommandText = query;
+                        cmd.Connection = context;
+
+
+                        OleDbDataAdapter da = new OleDbDataAdapter();
+                        da.SelectCommand = cmd;
+
+                        DataTable tableAlumno = new DataTable();
+
+                        da.Fill(tableAlumno);
+
+                        if (tableAlumno.Rows.Count > 0)
+                        {
+                            result.Objects = new List<object>();
+
+                            foreach (DataRow row in tableAlumno.Rows)
+                            {
+                                ML.Alumno alumno = new ML.Alumno();
+                                alumno.Nombre = row[0].ToString();
+                                alumno.ApellidoPaterno = row[1].ToString();
+                                alumno.ApellidoMaterno = row[2].ToString();
+
+                                result.Objects.Add(alumno);
+                            }
+
+                            result.Correct = true;
+
+                        }
+
+                        result.Object = tableAlumno;
+
+                        if (tableAlumno.Rows.Count > 1)
+                        {
+                            result.Correct = true;
+                        }
+                        else
+                        {
+                            result.Correct = false;
+                            result.ErrorMessage = "No existen registros en el excel";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+
+            }
+
+            return result;
+        }
+
+        public static ML.Result ValidarExcel(List<object> Object)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                result.Objects = new List<object>();
+                //DataTable  //Rows //Columns
+                int i = 1;
+                foreach (ML.Semestre semestre in Object)
+                {
+                    ML.ErrorExcel error = new ML.ErrorExcel();
+                    error.IdRegistro = i++;
+
+                    semestre.Nombre = (semestre.Nombre == "") ? error.Mensaje += "Ingresar el nombre  " : semestre.Nombre;
+
+                    if (error.Mensaje != null)
+                    {
+                        result.Objects.Add(error);
+                    }
+
+
+                }
+                result.Correct = true;
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+
+            }
+
             return result;
         }
     }
