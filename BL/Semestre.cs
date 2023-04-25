@@ -81,8 +81,8 @@ namespace BL
             {
                 using (OleDbConnection context = new OleDbConnection(connString))
                 {
-                    //string query = "SELECT * FROM [Hoja1$]";
-                    string query = "SELECT * FROM [Sheet1$]";
+                    string query = "SELECT * FROM [Hoja1$]";
+                    //string query = "SELECT * FROM [Sheet1$]";
                     using (OleDbCommand cmd = new OleDbCommand())
                     {
                         cmd.CommandText = query;
@@ -102,12 +102,12 @@ namespace BL
 
                             foreach (DataRow row in tableAlumno.Rows)
                             {
-                                ML.Alumno alumno = new ML.Alumno();
-                                alumno.Nombre = row[0].ToString();
-                                alumno.ApellidoPaterno = row[1].ToString();
-                                alumno.ApellidoMaterno = row[2].ToString();
+                                ML.Semestre semestre = new ML.Semestre();
 
-                                result.Objects.Add(alumno);
+                                semestre.Nombre = row[0].ToString();
+
+
+                                result.Objects.Add(semestre);
                             }
 
                             result.Correct = true;
@@ -133,7 +133,7 @@ namespace BL
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
 
-            }
+            } 
 
             return result;
         }

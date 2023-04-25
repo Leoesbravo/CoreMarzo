@@ -62,7 +62,7 @@ namespace PL.Controllers
                                 if (resultValidacion.Objects.Count == 0)
                                 {
                                     resultValidacion.Correct = true;
-                                    HttpContext.Session.SetString("PathArchivo", filePath);
+                                    HttpContext.Session.SetString("PathArchivo", filePath);//crear la session
                                 }
 
                                 return View(resultValidacion);
@@ -84,7 +84,7 @@ namespace PL.Controllers
             else
             {
                 string rutaArchivoExcel = HttpContext.Session.GetString("PathArchivo");
-                string connectionString = configuration["ConnectionStringExcel:value"] + rutaArchivoExcel;
+                string connectionString = configuration["ExcelConString"] + rutaArchivoExcel;
 
                 ML.Result resultData = BL.Semestre.ConvertExcelToDataTable(connectionString);
                 if (resultData.Correct)
