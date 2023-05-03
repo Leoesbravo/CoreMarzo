@@ -51,5 +51,21 @@ namespace SLWebApi.Controllers
                 return NotFound(result);
             }
         }
+        [HttpPut]
+        [Route("api/Alumno/Update/{id}")]
+        public IActionResult Update(int id,[FromBody] ML.Alumno alumno)
+        {
+            //alumno.IdAlumno = id;
+            ML.Result result = BL.Alumno.Update(alumno);
+
+            if (result.Correct)
+            {
+                return Ok(result.Object);
+            }
+            else
+            {
+                return NotFound(result);
+            }
+        }
     }
 }

@@ -194,5 +194,11 @@ namespace PL.Controllers
             return Json(result);
         }
 
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
     }
 }
