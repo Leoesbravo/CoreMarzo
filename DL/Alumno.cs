@@ -25,7 +25,7 @@ public partial class Alumno
 
     public virtual Semestre? IdSemestreNavigation { get; set; }
 
-    //Propiedades creaadas 
+
 
     public string SemestreNombre { get; set; }
     public string Turno { get; set; }

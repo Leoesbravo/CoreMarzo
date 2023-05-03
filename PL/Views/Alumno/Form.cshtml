@@ -117,7 +117,7 @@
 
             @if (Model.Horario.Grupo.Grupos == null)
             {
-                <div class="col-md-3">
+                <div class="col-md-3" >
                     @Html.LabelFor(model => model.Horario.Grupo)
 
                     @Html.DropDownListFor(model => model.Horario.Grupo.IdGrupo, new SelectList(string.Empty, "Value", "Text"), "Selecciona una opción", new { @class = "form-control", @id = "ddlGrupo" })
