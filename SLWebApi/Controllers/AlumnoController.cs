@@ -35,5 +35,21 @@ namespace SLWebApi.Controllers
                 return NotFound(result);
             }
         }
+        [HttpGet]
+        [Route("api/Alumno/GetById/{id}")]
+        public IActionResult GetById( int id)
+        {
+
+            ML.Result result = BL.Alumno.GetByIdEF(id);
+
+            if (result.Correct)
+            {
+                return Ok(result.Object);
+            }
+            else
+            {
+                return NotFound(result);
+            }
+        }
     }
 }
