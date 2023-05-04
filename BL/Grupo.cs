@@ -9,41 +9,41 @@ namespace BL
 {
     public class Grupo
     {
-        public static ML.Result GetByIdPlantel(int idPlantel)
-        {
-            ML.Result result = new ML.Result();
+        //public static ML.Result GetByIdPlantel(int idPlantel)
+        //{
+        //    ML.Result result = new ML.Result();
 
-            try
-            {
-                using (DL.IespinozaProgramacionNcapasGm2023Context context = new DL.IespinozaProgramacionNcapasGm2023Context())
-                {
-                    var semestreList = context.Grupos.FromSqlRaw($"GrupoGetByIdPlantel {idPlantel}").ToList();
+        //    try
+        //    {
+        //        using (DL.IespinozaProgramacionNcapasGm2023Context context = new DL.IespinozaProgramacionNcapasGm2023Context())
+        //        {
+        //            var semestreList = context.Grupos.FromSqlRaw($"GrupoGetByIdPlantel {idPlantel}").ToList();
 
-                    result.Objects = new List<object>();
+        //            result.Objects = new List<object>();
 
-                    foreach (var row in semestreList)
-                    {
-                        ML.Grupo grupo = new ML.Grupo();
+        //            foreach (var row in semestreList)
+        //            {
+        //                ML.Grupo grupo = new ML.Grupo();
 
-                        grupo.IdGrupo = row.IdGrupo;
-                        grupo.Nombre = row.Nombre;
+        //                grupo.IdGrupo = row.IdGrupo;
+        //                grupo.Nombre = row.Nombre;
 
-                        result.Objects.Add(grupo);
+        //                result.Objects.Add(grupo);
 
-                    }
+        //            }
 
-                    result.Correct = true;
-                }
+        //            result.Correct = true;
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                result.Correct = false;
-                result.Ex = ex;
-                result.ErrorMessage = ex.Message;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        result.Correct = false;
+        //        result.Ex = ex;
+        //        result.ErrorMessage = ex.Message;
 
-            }
-            return result;
-        }
+        //    }
+        //    return result;
+        //}
     }
 }

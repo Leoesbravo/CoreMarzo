@@ -4,23 +4,52 @@ namespace PL.Controllers
 {
     public class AlumnoController : Controller
     {
+        //[HttpGet]
+        //public ActionResult GetAll()
+        //{
+        //    ML.Alumno alumno = new ML.Alumno();
+        //    ML.Result result = BL.Alumno.GetAll(alumno);
+
+
+        //    if (result.Correct)
+        //    {
+        //        alumno.Alumnos = result.Objects;
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Message = "Ocurrio un error al hacer la consulta de alumnos" + result.ErrorMessage;
+        //    }
+
+        //    return View(alumno);
+        //}
         [HttpGet]
         public ActionResult GetAll()
         {
-            ML.Alumno alumno = new ML.Alumno();
-            ML.Result result = BL.Alumno.GetAll(alumno);
+            ML.Result resultAlumnos = new ML.Result();
+            resultAlumnos.Objects = new List<object>();
 
-
-            if (result.Correct)
+            using (var client = new HttpClient())
             {
-                alumno.Alumnos = result.Objects;
-            }
-            else
-            {
-                ViewBag.Message = "Ocurrio un error al hacer la consulta de alumnos" + result.ErrorMessage;
-            }
+                client.BaseAddress = new Uri("http://localhost:5047/api/");
 
-            return View(alumno);
+                var responseTask = client.GetAsync("Alumno/GetAll");
+                responseTask.Wait(); //esperar a que se resuelva la llamada al servicio
+
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<ML.Result>();
+                    readTask.Wait();
+
+                    foreach (var resultItem in readTask.Result.Objects)
+                    {
+                        ML.Alumno resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.Alumno>(resultItem.ToString());
+                        resultAlumnos.Objects.Add(resultItemList);
+                    }
+                }
+            }
+            return View(resultAlumnos);
         }
 
         [HttpPost]
@@ -47,7 +76,7 @@ namespace PL.Controllers
         public ActionResult Form(int? idAlumno)
         {
             ML.Result resultSemestres = BL.Semestre.GetAll();
-            ML.Result resultPlanteles = BL.Plantel.GetAll();
+            //ML.Result resultPlanteles = BL.Plantel.GetAll();
 
             ML.Alumno alumno = new ML.Alumno();
             alumno.Semestre = new ML.Semestre();
@@ -59,7 +88,7 @@ namespace PL.Controllers
             if (resultSemestres.Correct)
             {
                 alumno.Semestre.Semestres = resultSemestres.Objects;
-                alumno.Horario.Grupo.Plantel.Planteles = resultPlanteles.Objects;
+                //alumno.Horario.Grupo.Plantel.Planteles = resultPlanteles.Objects;
             }
             //add o update
             if (idAlumno == null)
@@ -153,7 +182,7 @@ namespace PL.Controllers
             else
             {
                 ML.Result resultSemestres = BL.Semestre.GetAll();
-                ML.Result resultPlanteles = BL.Plantel.GetAll();
+                //ML.Result resultPlanteles = BL.Plantel.GetAll();
 
                 alumno.Semestre = new ML.Semestre();
 
@@ -161,7 +190,7 @@ namespace PL.Controllers
                 alumno.Horario.Grupo = new ML.Grupo();
                 alumno.Horario.Grupo.Plantel = new ML.Plantel();
                 alumno.Semestre.Semestres = resultSemestres.Objects;
-                alumno.Horario.Grupo.Plantel.Planteles = resultPlanteles.Objects;
+                //alumno.Horario.Grupo.Plantel.Planteles = resultPlanteles.Objects;
                 return View(alumno);
             }
           
@@ -178,12 +207,12 @@ namespace PL.Controllers
             return bytes;
         }
 
-        public JsonResult GetGrupo(int idPlantel)
-        {
-            var result = BL.Grupo.GetByIdPlantel(idPlantel);
+        //public JsonResult GetGrupo(int idPlantel)
+        //{
+        //    var result = BL.Grupo.GetByIdPlantel(idPlantel);
 
-            return Json(result.Objects);
-        }
+        //    return Json(result.Objects);
+        //}
 
         [HttpPost]
         public JsonResult CambiarStatus(int idAlumno, bool status)
@@ -210,7 +239,7 @@ namespace PL.Controllers
                 ML.Alumno alumno = (ML.Alumno)result.Object;
                 if (password == alumno.ApellidoPaterno)
                 {
-                    return View(); //como devolver a una vista diferente en MVC .net core
+                    return RedirectToAction("Index","Home"); //como devolver a una vista diferente en MVC .net core
                 }
                 else
                 {

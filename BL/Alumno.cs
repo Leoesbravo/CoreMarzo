@@ -92,24 +92,24 @@ namespace BL
                         alumno.ApellidoPaterno = row.ApellidoPaterno;
                         alumno.ApellidoMaterno = row.ApellidoMaterno;
 
-                        alumno.Imagen = row.Imagen;
+                        //alumno.Imagen = row.Imagen;
                         alumno.FechaNacimiento = row.FechaNacimiento.Value.ToString("dd-MM-yyyy");
-                        alumno.Estatus = row.Estatus.Value;
+                        //alumno.Estatus = row.Estatus.Value;
 
                         alumno.Semestre = new ML.Semestre();
                         alumno.Semestre.IdSemestre = row.IdSemestre.Value;
-                        alumno.Semestre.Nombre = row.SemestreNombre;
+                       // alumno.Semestre.Nombre = row.SemestreNombre;
 
                         alumno.Horario = new ML.Horario();
-                        alumno.Horario.Turno = row.Turno;
+                       // alumno.Horario.Turno = row.Turno;
 
                         alumno.Horario.Grupo = new ML.Grupo();
-                        alumno.Horario.Grupo.IdGrupo = row.IdGrupo;
-                        alumno.Horario.Grupo.Nombre = row.Grupo;
+                        //alumno.Horario.Grupo.IdGrupo = row.IdGrupo;
+                        //alumno.Horario.Grupo.Nombre = row.Grupo;
 
                         alumno.Horario.Grupo.Plantel = new ML.Plantel();
-                        alumno.Horario.Grupo.Plantel.IdPlantel = row.IdPlantel;
-                        alumno.Horario.Grupo.Plantel.Nombre = row.Plantel;
+                        //alumno.Horario.Grupo.Plantel.IdPlantel = row.IdPlantel;
+                        //alumno.Horario.Grupo.Plantel.Nombre = row.Plantel;
 
                         result.Objects.Add(alumno);
 
@@ -229,16 +229,16 @@ namespace BL
 
                         alumno.Semestre = new ML.Semestre();
                         alumno.Semestre.IdSemestre = objAlumno.IdSemestre.Value;
-                        alumno.Semestre.Nombre = objAlumno.SemestreNombre;
+                        //alumno.Semestre.Nombre = objAlumno.SemestreNombre;
 
                         alumno.Horario = new ML.Horario();
-                        alumno.Horario.Turno = objAlumno.Turno;
+                        //alumno.Horario.Turno = objAlumno.Turno;
 
                         alumno.Horario.Grupo = new ML.Grupo();
-                        alumno.Horario.Grupo.IdGrupo = objAlumno.IdGrupo;
+                        //alumno.Horario.Grupo.IdGrupo = objAlumno.IdGrupo;
 
                         alumno.Horario.Grupo.Plantel = new ML.Plantel();
-                        alumno.Horario.Grupo.Plantel.IdPlantel = objAlumno.IdPlantel;
+                        //alumno.Horario.Grupo.Plantel.IdPlantel = objAlumno.IdPlantel;
 
                         result.Object = alumno; //boxing
 
