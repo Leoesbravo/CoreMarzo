@@ -152,6 +152,62 @@ namespace BL
             }
             return result;
         }
+        public static ML.Result GetByUserName(string userName)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.IespinozaProgramacionNcapasGm2023Context context = new DL.IespinozaProgramacionNcapasGm2023Context())
+                {
+
+                    var objAlumno = context.Alumnos.FromSqlRaw($"AlumnoGetByUserName {userName}").AsEnumerable().FirstOrDefault();
+
+                    if (objAlumno != null)
+                    {
+
+                        ML.Alumno alumno = new ML.Alumno();
+                        alumno.ApellidoPaterno = objAlumno.ApellidoPaterno;
+                        alumno.Nombre = objAlumno.Nombre;
+                        //alumno.ApellidoPaterno = objAlumno.ApellidoPaterno;
+                        //alumno.ApellidoMaterno = objAlumno.ApellidoMaterno;
+
+                        //alumno.Semestre = new ML.Semestre();
+                        //alumno.Semestre.IdSemestre = objAlumno.IdSemestre.Value;
+                        //alumno.Semestre.Nombre = objAlumno.SemestreNombre;
+
+                        //alumno.Horario = new ML.Horario();
+                        //alumno.Horario.Turno = objAlumno.Turno;
+
+                        //alumno.Horario.Grupo = new ML.Grupo();
+                        //alumno.Horario.Grupo.IdGrupo = objAlumno.IdGrupo;
+
+                        //alumno.Horario.Grupo.Plantel = new ML.Plantel();
+                        //alumno.Horario.Grupo.Plantel.IdPlantel = objAlumno.IdPlantel;
+
+                        result.Object = alumno; //boxing
+
+
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "Ocurrió un error al obtener los registros en la tabla Alumno";
+                    }
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
         public static ML.Result GetByIdEF(int IdAlumno)
         {
             ML.Result result = new ML.Result();

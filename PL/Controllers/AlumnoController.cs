@@ -200,5 +200,30 @@ namespace PL.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult Login(string userName, string password)
+        {
+            ML.Result result = BL.Alumno.GetByUserName(userName);
+
+            if (result.Correct)//si el usuario existe
+            {
+                ML.Alumno alumno = (ML.Alumno)result.Object;
+                if (password == alumno.ApellidoPaterno)
+                {
+                    return View(); //como devolver a una vista diferente en MVC .net core
+                }
+                else
+                {
+                    ViewBag.Mensaje = "Contraseña invalida";
+                    return PartialView("ModalLogin");
+                }
+            }
+            else
+            {
+                ViewBag.Mensaje = "Usuario invalido";
+                return PartialView("ModalLogin");
+            }
+
+        }
     }
 }
