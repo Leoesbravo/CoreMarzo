@@ -106,13 +106,24 @@
             </div>
         </div>
         <div class="row">
+             @if (Model.Horario.Grupo.Plantel.Planteles != null)
+            {
             <div class="col-md-3">
                 @Html.LabelFor(model => model.Horario.Grupo.Plantel)
 
                 @Html.DropDownListFor(model => model.Horario.Grupo.Plantel.IdPlantel, new SelectList(Model.Horario.Grupo.Plantel.Planteles, "IdPlantel", "Nombre"), "Selecciona una opción", new { @class = "form-control", @id = "ddlPlantel" })
 
                 @Html.ValidationMessageFor(model => model.Horario.Grupo.Plantel.IdPlantel)
-            </div>
+                </div>
+            }
+            else
+            {
+               <div class="col-md-3">
+                    @Html.LabelFor(model => model.Horario.Grupo.Plantel)
+
+                    @Html.DropDownListFor(model => model.Horario.Grupo.IdGrupo, new SelectList(string.Empty, "Value", "Text"), "Selecciona una opción", new { @class = "form-control", @id = "ddlGrupo" })
+                </div>  
+            }
 
 
             @if (Model.Horario.Grupo.Grupos == null)

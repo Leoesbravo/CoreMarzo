@@ -93,6 +93,7 @@ namespace BL
                         alumno.ApellidoMaterno = row.ApellidoMaterno;
 
                         //alumno.Imagen = row.Imagen;
+                     
                         alumno.FechaNacimiento = row.FechaNacimiento.Value.ToString("dd-MM-yyyy");
                         //alumno.Estatus = row.Estatus.Value;
 
@@ -136,7 +137,7 @@ namespace BL
             {
                 using (DL.IespinozaProgramacionNcapasGm2023Context context = new DL.IespinozaProgramacionNcapasGm2023Context())
                 {
-                    int queryEF = context.Database.ExecuteSqlRaw($"AlumnoAdd '{alumno.Nombre}','{alumno.ApellidoPaterno}','{alumno.ApellidoMaterno}', '{alumno.FechaNacimiento}', {alumno.Semestre.IdSemestre} ,'{alumno.Imagen}', '{alumno.Horario.Turno}', {alumno.Horario.Grupo.IdGrupo}");
+                    int queryEF = context.Database.ExecuteSqlRaw($"AlumnoAdd '{alumno.Nombre}','{alumno.ApellidoPaterno}','{alumno.ApellidoMaterno}', '{alumno.FechaNacimiento}', {alumno.Semestre.IdSemestre} ");
 
                     if (queryEF > 0)
                     {

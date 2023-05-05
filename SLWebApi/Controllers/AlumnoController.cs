@@ -13,7 +13,7 @@ namespace SLWebApi.Controllers
 
             if (result.Correct)
             {
-                return Ok(result.Objects);
+                return Ok(result);
             }
             else
             {
@@ -28,7 +28,7 @@ namespace SLWebApi.Controllers
 
             if (result.Correct)
             {
-                return Ok(result.Objects);
+                return Ok(result);
             }
             else
             {
@@ -44,13 +44,13 @@ namespace SLWebApi.Controllers
 
             if (result.Correct)
             {
-                return Ok(result.Object);
+                return Ok(result);
             }
             else
             {
                 return NotFound(result);
             }
-        }
+            }
         [HttpPut]
         [Route("api/Alumno/Update/{id}")]
         public IActionResult Update(int id,[FromBody] ML.Alumno alumno)
@@ -60,7 +60,7 @@ namespace SLWebApi.Controllers
 
             if (result.Correct)
             {
-                return Ok(result.Object);
+                return Ok(result);
             }
             else
             {

@@ -25,11 +25,12 @@ namespace PL.Controllers
         [HttpGet]
         public ActionResult GetAll()
         {
-            ML.Result resultAlumnos = new ML.Result();
-            resultAlumnos.Objects = new List<object>();
-
+            ML.Alumno resultAlumnos = new ML.Alumno();
+            resultAlumnos.Alumnos = new List<object>();
             using (var client = new HttpClient())
             {
+
+
                 client.BaseAddress = new Uri("http://localhost:5047/api/");
 
                 var responseTask = client.GetAsync("Alumno/GetAll");
@@ -45,7 +46,7 @@ namespace PL.Controllers
                     foreach (var resultItem in readTask.Result.Objects)
                     {
                         ML.Alumno resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.Alumno>(resultItem.ToString());
-                        resultAlumnos.Objects.Add(resultItemList);
+                        resultAlumnos.Alumnos.Add(resultItemList);
                     }
                 }
             }
@@ -55,7 +56,7 @@ namespace PL.Controllers
         [HttpPost]
         public ActionResult GetAll(ML.Alumno alumno)
         {
-           
+
             ML.Result result = BL.Alumno.GetAll(alumno);
 
 
@@ -100,6 +101,28 @@ namespace PL.Controllers
 
             else
             {
+
+                using (var client = new HttpClient())
+                {
+
+                    client.BaseAddress = new Uri("http://localhost:5047/api/");
+                    //client.BaseAddress = new Uri(configuration["WebApi"]);
+                    var responseTask = client.GetAsync("Alumno/GetById/" + idAlumno);
+                    responseTask.Wait();
+                    var resultAPI = responseTask.Result;
+                    if (resultAPI.IsSuccessStatusCode)
+                    {
+                        var readTask = resultAPI.Content.ReadAsAsync<ML.Result>();
+                        readTask.Wait();
+                        ML.Alumno resultItemList = new ML.Alumno();
+                        resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.Alumno>(readTask.Result.Object.ToString());
+                        alumno = resultItemList;
+
+                    }
+                }
+                return View(alumno);
+
+
                 //bl.alumno.getbyid(idAlumno.value)
                 //ML.Result result = BL.Alumno.GetByIdEF(idAlumno.Value);
 
@@ -133,7 +156,69 @@ namespace PL.Controllers
             }
         }
 
-        [HttpPost] //va a recibir la informacion que venga desde la vista  
+        //[HttpPost] //metodo sin servicios web
+        //public ActionResult Form(ML.Alumno alumno)
+        //{
+        //    if (ModelState.IsValid)//validar si se cumplieron todas las data annotations
+        //    {
+        //        IFormFile file = Request.Form.Files["inpImagen"];
+
+        //        if (file != null)
+        //        {
+        //            alumno.Imagen = Convert.ToBase64String(ConvertToBytes(file));
+
+        //        }
+
+        //        ML.Result result = new ML.Result();
+        //        //add o update
+        //        if (alumno.IdAlumno == 0)
+        //        {
+        //            //add
+        //            result = BL.Alumno.Add(alumno);
+        //            if (result.Correct)
+        //            {
+        //                ViewBag.Message = "Se inserto correctamente el alumno";
+        //            }
+        //            else
+        //            {
+        //                ViewBag.Message = "Ocurrio un error al insertar el alumno" + result.ErrorMessage;
+        //            }
+
+        //        }
+        //        else
+        //        {
+
+        //            //update
+        //            //result = BL.Alumno.UpdateEF(alumno);
+        //            //if (result.Correct)
+        //            //{
+        //            //    ViewBag.Message = "Se actualizo correctamente el registro del alumno";
+        //            //}
+        //            //else
+        //            //{
+        //            //    ViewBag.Message = "Ocurrio un error al actualizar el registro del alumno" + result.ErrorMessage;
+        //            //}
+        //        }
+
+        //        return View("Modal");
+        //    }
+        //    else
+        //    {
+        //        ML.Result resultSemestres = BL.Semestre.GetAll();
+        //        //ML.Result resultPlanteles = BL.Plantel.GetAll();
+
+        //        alumno.Semestre = new ML.Semestre();
+
+        //        alumno.Horario = new ML.Horario();
+        //        alumno.Horario.Grupo = new ML.Grupo();
+        //        alumno.Horario.Grupo.Plantel = new ML.Plantel();
+        //        alumno.Semestre.Semestres = resultSemestres.Objects;
+        //        //alumno.Horario.Grupo.Plantel.Planteles = resultPlanteles.Objects;
+        //        return View(alumno);
+        //    }
+
+        //}
+        [HttpPost] //metodo con servicios web
         public ActionResult Form(ML.Alumno alumno)
         {
             if (ModelState.IsValid)//validar si se cumplieron todas las data annotations
@@ -151,33 +236,48 @@ namespace PL.Controllers
                 if (alumno.IdAlumno == 0)
                 {
                     //add
-                    result = BL.Alumno.Add(alumno);
-                    if (result.Correct)
+                    using (var client = new HttpClient())
                     {
-                        ViewBag.Message = "Se inserto correctamente el alumno";
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Ocurrio un error al insertar el alumno" + result.ErrorMessage;
+                        client.BaseAddress = new Uri("http://localhost:5047/api/");
+
+                        //HTTP POST
+                        var postTask = client.PostAsJsonAsync<ML.Alumno>("Alumno/Add", alumno);
+                        postTask.Wait();
+
+                        var resultAlumno = postTask.Result;
+                        if (resultAlumno.IsSuccessStatusCode)
+                        {
+                            ViewBag.Mensaje = "Se ha insertado el usuario";
+                            return PartialView("Modal");
+                        }
+
+                        else
+                        {
+                            ViewBag.Mensaje = "No se inserto el usuario";
+                            return PartialView("Modal");
+                        }
                     }
 
                 }
                 else
                 {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("http://localhost:5047/api/");
 
-                    //update
-                    //result = BL.Alumno.UpdateEF(alumno);
-                    //if (result.Correct)
-                    //{
-                    //    ViewBag.Message = "Se actualizo correctamente el registro del alumno";
-                    //}
-                    //else
-                    //{
-                    //    ViewBag.Message = "Ocurrio un error al actualizar el registro del alumno" + result.ErrorMessage;
-                    //}
+                        //HTTP POST
+                        var postTask = client.PutAsJsonAsync<ML.Alumno>("Alumno/Update/" + alumno.IdAlumno, alumno);
+                        postTask.Wait();
+
+                        var resultAlumno = postTask.Result;
+                        if (resultAlumno.IsSuccessStatusCode)
+                        {
+                            ViewBag.Mensaje = "Se ha actualizado el alumno";
+                            return PartialView("Modal");
+                        }
+                    }
+                    return PartialView("Modal");
                 }
-
-                return View("Modal");
             }
             else
             {
@@ -193,7 +293,7 @@ namespace PL.Controllers
                 //alumno.Horario.Grupo.Plantel.Planteles = resultPlanteles.Objects;
                 return View(alumno);
             }
-          
+
         }
 
         public static byte[] ConvertToBytes(IFormFile imagen)
@@ -217,8 +317,8 @@ namespace PL.Controllers
         [HttpPost]
         public JsonResult CambiarStatus(int idAlumno, bool status)
         {
-            
-            ML.Result result = BL.Alumno.CambiarEstatus(idAlumno,status);
+
+            ML.Result result = BL.Alumno.CambiarEstatus(idAlumno, status);
 
             return Json(result);
         }
@@ -239,7 +339,7 @@ namespace PL.Controllers
                 ML.Alumno alumno = (ML.Alumno)result.Object;
                 if (password == alumno.ApellidoPaterno)
                 {
-                    return RedirectToAction("Index","Home"); //como devolver a una vista diferente en MVC .net core
+                    return RedirectToAction("Index", "Home"); //como devolver a una vista diferente en MVC .net core
                 }
                 else
                 {
